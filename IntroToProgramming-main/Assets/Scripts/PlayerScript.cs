@@ -2,14 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerScript : MonoBehaviour
 {
     //These are the player's Variables, the raw info that defines them
-    
+
     //The Rigidbody2D is a component that gives the player physics, and is what we use to move
+    public static PlayerScript instance;
     public Rigidbody2D RB;
 
     //TextMeshPro is a component that draws text on the screen.
@@ -17,18 +19,37 @@ public class PlayerScript : MonoBehaviour
     public TextMeshPro ScoreText;
     public TextMeshPro HealthText;
     
-    //This will control how fast the player moves
+    //This will control how
+    //fast the player moves
     public float Speed = 5;
-    
+
     //This is how many points we currently have
-    public int Score = 0;
-    public int Health = 100;
-    
+    public static int Score = 0;
+    public static int Health = 100;
+
     //Start automatically gets triggered once when the objects turns on/the game starts
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+
+        }
+
+
+    }
     void Start()
     {
+
+        GameObject healthObj = GameObject.Find("Health Text");
+        if (healthObj != null)
+        {
+            HealthText = healthObj.GetComponent<TextMeshPro>();
+        }
+
         //During setup we call UpdateScore to make sure our score text looks correct
         UpdateScore();
+        UpdateHealth();
     }
 
     //Update is a lot like Start, but it automatically gets triggered once per frame
@@ -100,10 +121,18 @@ public class PlayerScript : MonoBehaviour
             UpdateScore();
         }
 
-        if (other.gameObject.CompareTag("Damage"))
+      
+
+        if (other.gameObject.CompareTag("Portal"))
         {
-            //Run your 'you lose' function!
-            Health -= 10;
+
+            SceneManager.LoadScene("map1");
+        }
+
+        if (other.gameObject.CompareTag("Back"))
+        {
+       
+            SceneManager.LoadScene("Example 3");
         }
 
         Damage damage = other.gameObject.GetComponent<Damage>();
@@ -112,7 +141,18 @@ public class PlayerScript : MonoBehaviour
         {
             damage.GetBumped();
             //Make your score variable go up by one. . .
-            Health--;
+            Health -= 25;
+            //And then update the game's score text
+            UpdateHealth();
+        }
+
+        Heal heal = other.gameObject.GetComponent <Heal>();
+        //If it does, run the code block belows
+        if (heal != null)
+        {
+            heal.GetBumped();
+            //Make your score variable go up by one. . .
+            Health += 25;
             //And then update the game's score text
             UpdateHealth();
         }
@@ -123,12 +163,23 @@ public class PlayerScript : MonoBehaviour
     public void UpdateScore()
     {
         ScoreText.text = "Score: " + Score;
+        if (Score >= 5)
+        {
+            SceneManager.LoadScene("youdidit");
+        }
     }
 
     public void UpdateHealth()
     {
         HealthText.text = "Health: " + Health;
+        if (Health <= 0)
+        {
+            Die();
+        }
     }
+
+    
+  
     //If this function is called, the player character dies. The game goes to a 'Game Over' screen.
     public void Die()
     {

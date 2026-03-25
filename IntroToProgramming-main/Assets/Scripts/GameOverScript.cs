@@ -16,6 +16,7 @@ public class GameOverScript : MonoBehaviour
         {
             //Then load the 'Example 3' scene
             SceneManager.LoadScene("Example 3");
+
         }
     }
 }
