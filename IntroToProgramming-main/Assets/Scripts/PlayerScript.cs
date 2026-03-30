@@ -152,7 +152,7 @@ public class PlayerScript : MonoBehaviour
         {
             heal.GetBumped();
             //Make your score variable go up by one. . .
-            Health += 25;
+            Health = 100;
             //And then update the game's score text
             UpdateHealth();
         }
