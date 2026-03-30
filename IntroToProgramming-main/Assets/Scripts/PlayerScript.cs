@@ -24,8 +24,8 @@ public class PlayerScript : MonoBehaviour
     public float Speed = 5;
 
     //This is how many points we currently have
-    public static int Score = 0;
-    public static int Health = 100;
+    public int Score = 0;
+    public int Health = 100;
 
     //Start automatically gets triggered once when the objects turns on/the game starts
 
